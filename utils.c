@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/10 07:02:53 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/10 07:10:59 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/12 08:27:27 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,23 @@ long	ft_atol(const char *str)
 	while (*str >= '0' && *str <= '9')
 		res = res * 10 + (*str++ - '0');
 	return (res * sign);
+}
+
+long	get_time_in_ms(void)
+{
+	struct timeval	tv;
+
+	if (gettimeofday(&tv, NULL) == -1)
+		return (-1);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
+void	print_action(char *str, t_philo *philo)
+{
+	long	time;
+
+	pthread_mutex_lock(&philo->data->write_lock);
+	time = (get_time_in_ms() - philo->data->start_time);
+	printf("%ld, %d, %s\n", time, philo->id, str);
+	pthread_mutex_unlock(&philo->data->write_lock);
 }

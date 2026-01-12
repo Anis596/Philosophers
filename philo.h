@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 02:30:42 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/10 07:06:27 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/12 07:34:37 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-typedef struct s_data
+typedef struct s_philo	t_philo;
+typedef struct s_data	t_data;
+
+struct s_data
 {
 	long			time_to_die;
 	long			time_to_eat;
@@ -32,9 +35,10 @@ typedef struct s_data
 	pthread_mutex_t	dead_lock;// Protège dead_flag
 	pthread_mutex_t	write_lock;// Protège les printf
 	pthread_mutex_t	*forks;// Tableau réel des mutex (fourchettes)
-}				t_data;
+	t_philo			*philos;// Tableau des philosophes
+};
 
-typedef struct s_philo
+struct s_philo
 {
 	pthread_t		thread_id;
 	int				id;
@@ -44,5 +48,14 @@ typedef struct s_philo
 	pthread_mutex_t	*left_fork;// Pointeur vers la fourchette gauche
 	pthread_mutex_t	*right_fork;// Pointeur vers la fourchette droite
 	pthread_mutex_t	meal_lock;// Protège last_meal_time
-}				t_philo;
+};
+
+long	ft_atol(const char *str);
+long	get_time_in_ms(void);
+int		valid_args(int ac, char **av);
+int		parse_args(t_data *data, char **av);
+int		init_data(t_data *data);
+void	*routine(void *arg);
+int		start_simulation(t_data *data);
+
 #endif

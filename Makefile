@@ -14,7 +14,7 @@ CC      = cc
 CFLAGS  = -Wall -Wextra -Werror -O3
 NAME    = philo
 
-SRCS    = main.c utils.c init.c
+SRCS    = main.c utils.c init.c threads.c
 OBJS    = $(SRCS:.c=.o)
 
 # --- Default rule ---
