@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/12 07:37:15 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/13 22:06:37 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,26 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	printf("Philo num : %d\n", philo->id);
+	if (philo->id % 2 == 0)
+		usleep(1000);
+	while (!dead_loop(philo))
+	{
+		pthread_mutex_lock(philo->left_fork);
+		print_action("has taken a fork", philo);
+		pthread_mutex_lock(philo->right_fork);
+		print_action("has taken a fork", philo);
+		print_action("is eating", philo);
+		pthread_mutex_lock(&philo->meal_lock);
+		philo->last_meal_time = get_time_in_ms();
+		philo->meals_eaten++;
+		pthread_mutex_unlock(&philo->meal_lock);
+		usleep(philo->data->time_to_eat * 1000);
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+		print_action("is sleeping", philo);
+		usleep(philo->data->time_to_sleep * 1000);
+		print_action("is thinking", philo);
+	}
 	return (NULL);
 }
 
