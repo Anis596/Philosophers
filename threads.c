@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/13 22:06:37 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/14 04:52:17 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	start_simulation(t_data *data)
 	i = 0;
 	while (i < data->nb_philo)
 	{
-		if (pthread_create(&data->philos[i].thread_id, NULL,
-				&routine, &data->philos[i]) != 0)
+		if (pthread_create(&data->philos[i].thread_id, NULL, &routine,
+				&data->philos[i]) != 0)
 			return (1);
 		i++;
 	}
@@ -59,4 +59,40 @@ int	start_simulation(t_data *data)
 		i++;
 	}
 	return (0);
+}
+
+static int	philo_died(t_philo *philo)
+{
+	long	time;
+
+	pthread_mutex_lock(&philo->meal_lock);
+	time = get_time_in_ms() - philo->last_meal_time;
+	pthread_mutex_unlock(&philo->meal_lock);
+	if (time >= philo->data->time_to_die)
+		return (1);
+	return (0);
+}
+
+void	monitor(t_data *data, t_philo *philo)
+{
+	int		i;
+	long	last_meal;
+
+	while (1)
+	{
+		i = 0;
+		while (i < data->nb_philo)
+		{
+			if (philo_died(&philo[i]))
+			{
+				print_action("died", &philo[i]);
+				pthread_mutex_lock(&data->dead_lock);
+				data->dead_flag = 1;
+				pthread_mutex_unlock(&data->dead_lock);
+				return ;
+			}
+			i++;
+		}
+		usleep(1000);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 02:30:42 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/12 07:34:37 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/14 04:54:02 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,8 @@ int		parse_args(t_data *data, char **av);
 int		init_data(t_data *data);
 void	*routine(void *arg);
 int		start_simulation(t_data *data);
+void	print_action(char *str, t_philo *philo);
+int		dead_loop(t_philo *philo);
+void	monitor(t_data *data, t_philo *philo);
 
 #endif
