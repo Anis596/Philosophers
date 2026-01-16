@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/14 04:52:17 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/16 18:52:26 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,6 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-int	start_simulation(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->nb_philo)
-	{
-		if (pthread_create(&data->philos[i].thread_id, NULL, &routine,
-				&data->philos[i]) != 0)
-			return (1);
-		i++;
-	}
-	i = 0;
-	while (i < data->nb_philo)
-	{
-		pthread_join(data->philos[i].thread_id, NULL);
-		i++;
-	}
-	return (0);
-}
-
 static int	philo_died(t_philo *philo)
 {
 	long	time;
@@ -76,7 +55,6 @@ static int	philo_died(t_philo *philo)
 void	monitor(t_data *data, t_philo *philo)
 {
 	int		i;
-	long	last_meal;
 
 	while (1)
 	{
@@ -95,4 +73,28 @@ void	monitor(t_data *data, t_philo *philo)
 		}
 		usleep(1000);
 	}
+}
+
+int	start_simulation(t_data *data)
+{
+	int		i;
+
+	i = 0;
+	data->start_time = get_time_in_ms();
+	while (i < data->nb_philo)
+	{
+		data->philos[i].last_meal_time = data->start_time;
+		if (pthread_create(&data->philos[i].thread_id, NULL, &routine,
+				&data->philos[i]) != 0)
+			return (1);
+		i++;
+	}
+	monitor(data, data->philos);
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		pthread_join(data->philos[i].thread_id, NULL);
+		i++;
+	}
+	return (0);
 }
