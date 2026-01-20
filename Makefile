@@ -11,10 +11,10 @@ RESET   = \033[0m
 
 # --- Variables ---
 CC      = cc
-CFLAGS  = -Wall -Wextra -Werror -O3
+CFLAGS  = -Wall -Wextra -Werror -pthread 
 NAME    = philo
 
-SRCS    = main.c utils.c init.c threads.c
+SRCS    = main.c utils.c init.c threads.c threads1.c
 OBJS    = $(SRCS:.c=.o)
 
 # --- Default rule ---
@@ -30,6 +30,12 @@ $(NAME): $(OBJS)
 	@echo "$(YELLOW)⚙️  Compilation de $< ...$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
+# --- Debug Rules ---
+# Usage: make sanitize
+sanitize: CFLAGS += -fsanitize=thread -g
+sanitize: re
+	@echo "$(BLUE)🕵️  Mode SANITIZE activé (Data Races check)$(RESET)"
+
 # --- Clean ---
 clean:
 	@echo "$(RED)🧹  Suppression des fichiers objets...$(RESET)"
@@ -41,4 +47,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re sanitize

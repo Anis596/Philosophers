@@ -6,11 +6,28 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/16 18:52:26 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/20 00:58:59 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	eat_think_and_sleep(t_philo *philo)
+{
+	pthread_mutex_lock(philo->right_fork);
+	print_action("has taken a fork", philo);
+	print_action("is eating", philo);
+	pthread_mutex_lock(&philo->meal_lock);
+	philo->last_meal_time = get_time_in_ms();
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->meal_lock);
+	usleep(philo->data->time_to_eat * 1000);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	print_action("is sleeping", philo);
+	usleep(philo->data->time_to_sleep * 1000);
+	print_action("is thinking", philo);
+}
 
 void	*routine(void *arg)
 {
@@ -23,19 +40,13 @@ void	*routine(void *arg)
 	{
 		pthread_mutex_lock(philo->left_fork);
 		print_action("has taken a fork", philo);
-		pthread_mutex_lock(philo->right_fork);
-		print_action("has taken a fork", philo);
-		print_action("is eating", philo);
-		pthread_mutex_lock(&philo->meal_lock);
-		philo->last_meal_time = get_time_in_ms();
-		philo->meals_eaten++;
-		pthread_mutex_unlock(&philo->meal_lock);
-		usleep(philo->data->time_to_eat * 1000);
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		print_action("is sleeping", philo);
-		usleep(philo->data->time_to_sleep * 1000);
-		print_action("is thinking", philo);
+		if (philo->data->nb_philo == 1)
+		{
+			usleep(philo->data->time_to_die);
+			pthread_mutex_unlock(philo->left_fork);
+			return (NULL);
+		}
+		eat_think_and_sleep(philo);
 	}
 	return (NULL);
 }
@@ -54,7 +65,7 @@ static int	philo_died(t_philo *philo)
 
 void	monitor(t_data *data, t_philo *philo)
 {
-	int		i;
+	int	i;
 
 	while (1)
 	{
@@ -71,13 +82,15 @@ void	monitor(t_data *data, t_philo *philo)
 			}
 			i++;
 		}
+		if (check_if_all_ate(data, philo) == 1)
+			return ;
 		usleep(1000);
 	}
 }
 
 int	start_simulation(t_data *data)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	data->start_time = get_time_in_ms();

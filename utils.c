@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/10 07:02:53 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/13 22:01:06 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/19 21:18:15 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,16 @@ void	print_action(char *str, t_philo *philo)
 	long	time;
 
 	pthread_mutex_lock(&philo->data->write_lock);
+	pthread_mutex_lock(&philo->data->dead_lock);
+	if (philo->data->dead_flag == 1)
+	{
+		pthread_mutex_unlock(&philo->data->dead_lock);
+		pthread_mutex_unlock(&philo->data->write_lock);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->dead_lock);
 	time = (get_time_in_ms() - philo->data->start_time);
-	printf("%ld, %d, %s\n", time, philo->id, str);
+	printf("%ld %d %s\n", time, philo->id, str);
 	pthread_mutex_unlock(&philo->data->write_lock);
 }
 
