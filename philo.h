@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 02:30:42 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/20 00:54:01 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/21 01:00:33 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,6 @@ void	print_action(char *str, t_philo *philo);
 int		dead_loop(t_philo *philo);
 int		check_if_all_ate(t_data *data, t_philo *philo);
 void	monitor(t_data *data, t_philo *philo);
+void	clean(t_data *data);
 
 #endif

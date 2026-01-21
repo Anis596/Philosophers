@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 02:49:52 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/19 23:40:39 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/21 01:01:07 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	start_simulation(&data);
+	clean(&data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/10 07:07:45 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/16 18:59:15 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/21 00:22:25 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,29 +70,43 @@ int	parse_args(t_data *data, char **av)
 	return (0);
 }
 
-int	init_data(t_data *data)
+static int	init_philos(t_data *data)
 {
 	int	i;
 
-	pthread_mutex_init(&data->dead_lock, NULL);
-	pthread_mutex_init(&data->write_lock, NULL);
-	data->philos = malloc(sizeof(t_philo) * data->nb_philo);
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
-	if (!data->philos || !data->forks)
-		return (1);
 	i = 0;
 	while (i < data->nb_philo)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
 		pthread_mutex_init(&data->philos[i].meal_lock, NULL);
-		data->dead_flag = 0;
 		data->philos[i].id = i + 1;
 		data->philos[i].meals_eaten = 0;
 		data->philos[i].last_meal_time = get_time_in_ms();
 		data->philos[i].data = data;
-		data->philos[i].left_fork = &data->forks[i];
-		data->philos[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
+		if (data->philos[i].id % 2 == 0)
+		{
+			data->philos[i].right_fork = &data->forks[i];
+			data->philos[i].left_fork = &data->forks[(i + 1) % data->nb_philo];
+		}
+		else
+		{
+			data->philos[i].left_fork = &data->forks[i];
+			data->philos[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
+		}
 		i++;
 	}
+	return (0);
+}
+
+int	init_data(t_data *data)
+{
+	pthread_mutex_init(&data->dead_lock, NULL);
+	pthread_mutex_init(&data->write_lock, NULL);
+	data->dead_flag = 0;
+	data->philos = malloc(sizeof(t_philo) * data->nb_philo);
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
+	if (!data->philos || !data->forks)
+		return (1);
+	init_philos(data);
 	return (0);
 }

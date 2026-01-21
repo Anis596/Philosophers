@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/20 00:58:59 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/01/21 00:52:02 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	eat_think_and_sleep(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 	print_action("is sleeping", philo);
 	usleep(philo->data->time_to_sleep * 1000);
+	if (philo->data->nb_philo % 2 != 0)
+		usleep(1000);
 	print_action("is thinking", philo);
 }
 
