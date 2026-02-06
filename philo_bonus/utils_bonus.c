@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/10 07:02:53 by abensaid          #+#    #+#             */
-/*   Updated: 2026/02/06 08:04:06 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/06 08:56:33 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,17 @@ void	clean(t_data *data)
 	sem_unlink("/philo_meals");
 	if (data->philos)
 		free(data->philos);
+}
+
+void	kill_all(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		kill(data->philos[i].pid, SIGKILL);
+		i++;
+	}
+	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/02/06 08:13:19 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/06 09:03:16 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,25 @@ void	*routine(void *arg)
 
 void	exit_handler(t_data *data, t_philo *philo)
 {
-	int	i;
+	int	status;
 	int	finished;
 
 	finished = 0;
-	i = 0;
 	while (1)
 	{
-		waitpid
+		waitpid(-1, &status, 0);
+		if (WIFEXITED(status))
+		{
+			if (WEXITSTATUS(status) == 1)
+			{
+				kill_all(data);
+				return ;
+			}
+			else if (WEXITSTATUS(status) == 0)
+				finished++;
+		}
+		if (finished == data->nb_philo)
+			return ;
 	}
 }
 
