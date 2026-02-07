@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/02/06 09:03:16 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/07 07:09:23 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	*monitor_death(void *arg)
 			printf("%ld %d died\n", get_time_in_ms() - philo->data->start_time,
 				philo->id);
 			sem_post(philo->data->meals_check);
+			clean(philo->data);
 			exit(1);
 		}
 		sem_post(philo->data->meals_check);
@@ -37,6 +38,8 @@ void	*monitor_death(void *arg)
 
 void	eat_think_and_sleep(t_philo *philo)
 {
+	long	think;
+
 	sem_wait(philo->data->forks);
 	print_action("has taken a fork", philo);
 	sem_wait(philo->data->forks);
@@ -52,6 +55,16 @@ void	eat_think_and_sleep(t_philo *philo)
 	print_action("is sleeping", philo);
 	usleep(philo->data->time_to_sleep * 1000);
 	print_action("is thinking", philo);
+	if (philo->data->nb_philo % 2 != 0)
+	{
+		if (philo->data->time_to_eat >= philo->data->time_to_sleep)
+		{
+			think = philo->data->time_to_eat - philo->data->time_to_sleep;
+			usleep((think * 1000) + 1000);
+		}
+		else
+			usleep(1000);
+	}
 }
 
 void	*routine(void *arg)
@@ -69,16 +82,19 @@ void	*routine(void *arg)
 		if (philo->data->nb_philo == 1)
 		{
 			sem_wait(philo->data->forks);
-			usleep(philo->data->time_to_die * 1000);
-			sem_post(philo->data->forks);
-			return (NULL);
+			print_action("has taken a fork", philo);
+			while (1)
+				usleep(1000);
 		}
+		if (philo->data->nb_meals_max != -1
+			&& philo->meals_eaten >= philo->data->nb_meals_max)
+			break ;
 		eat_think_and_sleep(philo);
 	}
 	return (NULL);
 }
 
-void	exit_handler(t_data *data, t_philo *philo)
+void	exit_handler(t_data *data)
 {
 	int	status;
 	int	finished;
@@ -115,10 +131,15 @@ void	start_simulation(t_data *data)
 		if (data->philos[i].pid == 0)
 		{
 			routine(&data->philos[i]);
+			clean(data);
 			exit(0);
 		}
 		if (data->philos[i].pid < 0)
+		{
+			kill_all(data);
 			exit(1);
+		}
 		i++;
 	}
+	exit_handler(data);
 }

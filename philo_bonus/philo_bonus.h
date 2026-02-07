@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 02:30:42 by abensaid          #+#    #+#             */
-/*   Updated: 2026/02/06 08:57:09 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/07 08:25:51 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ struct s_philo
 	pid_t			pid;
 };
 
+int		ft_strlen(char *str);
 long	ft_atol(const char *str);
 long	get_time_in_ms(void);
 int		valid_args(int ac, char **av);
@@ -61,7 +62,7 @@ void	*monitor_death(void *arg);
 void	*routine(void *arg);
 void	kill_all(t_data *data);
 void	exit_handler(t_data *data);
-int		start_simulation(t_data *data);
+void	start_simulation(t_data *data);
 void	print_action(char *str, t_philo *philo);
 void	clean(t_data *data);
 

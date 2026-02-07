@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 02:30:42 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/21 01:00:33 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/07 08:52:59 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ struct s_philo
 	pthread_mutex_t	meal_lock;// Protège last_meal_time
 };
 
+int		ft_strlen(char *str);
 long	ft_atol(const char *str);
 long	get_time_in_ms(void);
 int		valid_args(int ac, char **av);

@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/10 07:02:53 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/21 01:50:25 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/07 08:46:27 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void	print_action(char *str, t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->data->dead_lock);
 	time = (get_time_in_ms() - philo->data->start_time);
-	if (!philo->data->dead_flag)
-		printf("%ld %d %s\n", time, philo->id, str);
+	printf("%ld %d %s\n", time, philo->id, str);
 	pthread_mutex_unlock(&philo->data->write_lock);
 }
 

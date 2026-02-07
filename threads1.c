@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 00:39:33 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/20 00:52:28 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/07 09:33:16 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,16 @@ int	check_if_all_ate(t_data *data, t_philo *philo)
 		return (1);
 	}
 	return (0);
+}
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		i++;
+	}
+	return (i);
 }

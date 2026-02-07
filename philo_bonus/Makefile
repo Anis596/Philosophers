@@ -14,7 +14,7 @@ CC      = cc
 CFLAGS  = -Wall -Wextra -Werror -pthread 
 NAME    = philo_bonus
 
-SRCS    = main.c utils_bonus.c init_bonus.c sem.c sem1.c
+SRCS    = main.c utils_bonus.c init_bonus.c sem.c utils_bonus1.c
 OBJS    = $(SRCS:.c=.o)
 
 # --- Default rule ---
@@ -29,12 +29,6 @@ $(NAME): $(OBJS)
 %.o: %.c
 	@echo "$(YELLOW)⚙️  Compilation de $< ...$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
-
-# --- Debug Rules ---
-# Usage: make sanitize
-sanitize: CFLAGS += -fsanitize=thread -g
-sanitize: re
-	@echo "$(BLUE)🕵️  Mode SANITIZE activé (Data Races check)$(RESET)"
 
 # --- Clean ---
 clean:

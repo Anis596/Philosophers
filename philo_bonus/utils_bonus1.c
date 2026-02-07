@@ -1,36 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils_bonus1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/05 02:49:52 by abensaid          #+#    #+#             */
-/*   Updated: 2026/02/07 08:35:45 by abensaid         ###   ########.fr       */
+/*   Created: 2026/02/07 08:20:53 by abensaid          #+#    #+#             */
+/*   Updated: 2026/02/07 08:25:34 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-int	main(int ac, char **av)
+int	ft_strlen(char *str)
 {
-	t_data	data;
+	int	i;
 
-	if (valid_args(ac, av) == 1)
+	i = 0;
+	while (str[i])
 	{
-		return (1);
+		i++;
 	}
-	if (parse_args(&data, av) == 1)
-	{
-		printf("Invalid arguments values\n");
-		return (1);
-	}
-	if (init_data(&data) == 1)
-	{
-		printf("Initialization failed\n");
-		return (1);
-	}
-	start_simulation(&data);
-	clean(&data);
-	return (0);
+	return (i);
 }

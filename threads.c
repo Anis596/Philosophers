@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 06:05:19 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/21 00:52:02 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/07 08:36:07 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	eat_think_and_sleep(t_philo *philo)
 {
+	long	think;
+
 	pthread_mutex_lock(philo->right_fork);
 	print_action("has taken a fork", philo);
 	print_action("is eating", philo);
@@ -26,9 +28,17 @@ void	eat_think_and_sleep(t_philo *philo)
 	pthread_mutex_unlock(philo->right_fork);
 	print_action("is sleeping", philo);
 	usleep(philo->data->time_to_sleep * 1000);
-	if (philo->data->nb_philo % 2 != 0)
-		usleep(1000);
 	print_action("is thinking", philo);
+	if (philo->data->nb_philo % 2 != 0)
+	{
+		if (philo->data->time_to_eat >= philo->data->time_to_sleep)
+		{
+			think = philo->data->time_to_eat - philo->data->time_to_sleep;
+			usleep((think * 1000) + 1000);
+		}
+		else
+			usleep(1000);
+	}
 }
 
 void	*routine(void *arg)

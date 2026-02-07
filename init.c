@@ -6,7 +6,7 @@
 /*   By: abensaid <abensaid@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/10 07:07:45 by abensaid          #+#    #+#             */
-/*   Updated: 2026/01/21 00:22:25 by abensaid         ###   ########.fr       */
+/*   Updated: 2026/02/07 08:51:50 by abensaid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 static int	is_digit(char *str)
 {
-	int	i;
+	int		i;
+	long	nb;
 
 	i = 0;
 	if (!str || str[0] == '\0')
-		return (0);
+		return (1);
 	if (str[i] == '+')
 		i++;
 	if (!str[i])
@@ -29,6 +30,12 @@ static int	is_digit(char *str)
 			return (1);
 		i++;
 	}
+	if ((str[0] == '+' && ft_strlen(str) > 11) || (str[0] != '+'
+			&& ft_strlen(str) > 10))
+		return (1);
+	nb = ft_atol(str);
+	if (nb > __INT_MAX__)
+		return (1);
 	return (0);
 }
 
@@ -46,7 +53,7 @@ int	valid_args(int ac, char **av)
 	{
 		if (is_digit(av[i]) != 0)
 		{
-			printf("Arguments must be only numbers\n");
+			printf("Invalid Arguments\n");
 			return (1);
 		}
 		i++;
